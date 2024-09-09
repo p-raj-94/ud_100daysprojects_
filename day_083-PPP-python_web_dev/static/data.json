@@ -1,0 +1,36 @@
+{
+    "jobs": [
+        {
+            "name": "Opérateur sur ligne d'injection",
+            "description": " Préparer la production et réaliser les réglages nécessaires, Assurer la maintenance de premier niveau des presses à injection,Surveiller la conformité des pièces",
+            "place": "Euro Pentel, Bry Sur Marne",
+            "date": "De janvier 2018 à décembre 2021"
+        },
+        {
+            "name": "Opérateur Machine",
+            "description": "",
+            "place": "Euro Pentel, Bry Sur Marne",
+            "date": "De septembre 2016 à janvier 2018"
+        }
+    ],
+    "diplomes": [
+        {
+            "name": "Formation Développeur Web",
+            "description": "Openclassroom",
+            "place": "En ligne",
+            "date": "De décembre 2021 à juin 2022"
+        },
+        {
+            "name": "CQP Monteur, régleur d'équipement de fabrication",
+            "description": "Fédération de la plasturgie et des composites ",
+            "place": "Paris",
+            "date": "De décembre 2019 à juin 2020"
+        },
+        {
+            "name": "Diplôme du Baccalauréat Général en Série Scientifique",
+            "description": "Lycée Louis Armand ",
+            "place": "Nogent-sur-Marne",
+            "date": "De 2009 à 2010 "
+        }
+    ]
+}
