@@ -1,7 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
 from time import time
-
 from random import choice
 
 GAME_STARTED = False
@@ -11,35 +10,60 @@ PLAYER_WORDS = []
 TIMING = 60
 COUNTING = 0
 
-with open("day_086-PPP-typing_speed_test/words.txt", "r") as f:
-    data = [line.strip() for line in f]
+def load_data():
+    global GAME_DATA, GAME_STARTED
+    if GAME_STARTED :
+        GAME_DATA = []
+    with open("day_086-PPP-typing_speed_test/words.txt", "r") as f:
+        data = [line.strip() for line in f]
 
-    while len(GAME_DATA) < 100:
-        GAME_DATA.append(choice(data).lower())
+        while len(GAME_DATA) < 100:
+            GAME_DATA.append(choice(data).lower())
 
+# reset the game when button pushed
+def reset_game():
+    global CORRECT_WORDS, PLAYER_WORDS, COUNTING, GAME_STARTED
+    load_data()
+    GAME_STARTED = False
+    CORRECT_WORDS = []
+    PLAYER_WORDS = []
+    COUNTING = 0
+    modify_text()
+    player_input.config(state="normal")
+    player_input.delete(0, tk.END)
+    player_input.insert(0, "Type here to start!")
+    subtitle.configure(text=f"Welcome!")
+    window.focus()
+    
 
+# Handle countdown + modify subtitle
 def count_down():
     global COUNTING
     wpm = len(PLAYER_WORDS)
     cpm = len("".join(PLAYER_WORDS))
-    COUNTING += 1
-    subtitle.configure(text=f"{TIMING - COUNTING} seconds remaining! {int(wpm/TIMING*60)} words/min, {int(cpm/TIMING*60)} chars/min")
-    
-    if TIMING > COUNTING:
+    if TIMING > COUNTING and GAME_STARTED:
+        COUNTING += 1
+        subtitle.configure(text=f"{TIMING - COUNTING} seconds remaining!\n {int(wpm/TIMING*60)} words/min, {int(cpm/TIMING*60)} chars/min")
         window.after(1000, count_down)
+    else:
+        if GAME_STARTED:
+            subtitle.configure(text=f"Congratulation!\n You're typing at {int(wpm/TIMING*60)} words/min, {int(cpm/TIMING*60)} chars/min")
+            player_input.config(state="disabled")
     
-
+# start the game when clicking on entry
 def handle_click(event):
+    global GAME_STARTED
     player_input.delete(0, tk.END)
-    GAME_STARTED = True
-    window.after(1000, count_down)
+    if not GAME_STARTED:
+        GAME_STARTED = True
+        subtitle.configure(text=f"{TIMING - COUNTING} seconds remaining!")
+        window.after(1000, count_down)
 
 
 def add_wording(event):
     word = player_input.get()
     # verify if entry is empty
     if word.strip() == "":
-        print("no word")
         return
     # add entry value in player words
     PLAYER_WORDS.append(word)
@@ -89,18 +113,17 @@ window.geometry('640x960')
 window.title('Fast Typing App')
 
 # Title and subtitle
-title = tk.Label(window, text="T Y P I N G   S P E E D   T E S T")
+title = tk.Label(window, text="T Y P I N G   S P E E D   T E S T",  font=("Arial", 20, "bold"))
 title.grid()
-subtitle = tk.Label(window, text="Welcome!")
+subtitle = tk.Label(window, text="Welcome!",  font=("Arial", 16, "bold"))
 subtitle.grid()
 
+
 # Text list
+load_data()
 word_list = tk.StringVar()
-word_list.set(" ".join(GAME_DATA))
 word_list_box = tk.Text(window, height=15, width=60 )
-word_list_box.insert(tk.END, word_list.get())
-change_part_of_text()
-word_list_box.configure(state="disabled")
+modify_text()
 word_list_box.grid(pady = 25)
 
 
@@ -114,7 +137,7 @@ player_input.bind('<Return>', add_wording)
 player_input.bind('<Button-1>', handle_click)
 
 # Button
-start_button = tk.Button(window, text='Restart')
+start_button = tk.Button(window, text='Restart', command=lambda: reset_game())
 start_button.grid(pady=10)
 
 
