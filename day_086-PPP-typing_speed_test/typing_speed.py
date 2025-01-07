@@ -18,7 +18,9 @@ def load_data():
         data = [line.strip() for line in f]
 
         while len(GAME_DATA) < 100:
-            GAME_DATA.append(choice(data).lower())
+            new_word = choice(data).lower()
+            if new_word not in GAME_DATA:
+                GAME_DATA.append(new_word)
 
 # reset the game when button pushed
 def reset_game():
@@ -47,7 +49,16 @@ def count_down():
         window.after(1000, count_down)
     else:
         if GAME_STARTED:
-            subtitle.configure(text=f"Congratulation!\n You're typing at {int(wpm/TIMING*60)} words/min, {int(cpm/TIMING*60)} chars/min")
+            if PLAYER_WORDS == CORRECT_WORDS:
+                subtitle.configure(text=f"Congratulation, no mistake!\n You're typing at {int(wpm/TIMING*60)} words/min, {int(cpm/TIMING*60)} chars/min")
+            else :
+                wrong_words = 0
+                wrong_char = 0
+                for i in range(len(CORRECT_WORDS)):
+                    if PLAYER_WORDS[i] != CORRECT_WORDS[i]:
+                        wrong_words += 1
+                        wrong_char += len(PLAYER_WORDS[i])
+                subtitle.configure(text=f"You've made some mistakes !\n You're typing at {int((wpm - wrong_words)/TIMING*60) } words/min ({wrong_words} mispelled word{"s" if wrong_words > 1 else ""}), {int((cpm- wrong_char)/TIMING*60) } chars/min")
             player_input.config(state="disabled")
     
 # start the game when clicking on entry
@@ -105,40 +116,50 @@ def change_part_of_text():
     start_index = "1.0"
     end_index = f"1.{len(GAME_DATA[0])}" 
     word_list_box.tag_add("start", start_index, end_index)
-    word_list_box.tag_config("start", font=("Arial", 16, "bold") )
+    word_list_box.tag_config("start", font=("Arial", 14, "bold") )
+
+
 
 # window
 window = tk.Tk()
-window.geometry('640x960')
+window.geometry('650x500')
 window.title('Fast Typing App')
+window.grid_columnconfigure(0, weight=1)
+window.grid_rowconfigure(0, weight=1)
+
+frame = tk.Frame(window)
+frame.grid(row=0, column=0, sticky= 'nsew')
+frame.columnconfigure([0,2], weight=1)
+frame.columnconfigure(1, weight=3)
+frame.rowconfigure(0, weight=1)
 
 # Title and subtitle
-title = tk.Label(window, text="T Y P I N G   S P E E D   T E S T",  font=("Arial", 20, "bold"))
-title.grid()
-subtitle = tk.Label(window, text="Welcome!",  font=("Arial", 16, "bold"))
-subtitle.grid()
+title = tk.Label(frame, text="T Y P I N G   S P E E D   T E S T",  font=("Arial", 20, "bold"))
+title.grid(row = 0, column=1)
+subtitle = tk.Label(frame, text="Welcome!",  font=("Arial", 14, "bold"))
+subtitle.grid(row = 1, column=1)
 
 
 # Text list
 load_data()
 word_list = tk.StringVar()
-word_list_box = tk.Text(window, height=15, width=60 )
+word_list_box = tk.Text(frame, height=15, width=60 )
 modify_text()
-word_list_box.grid(pady = 25)
+word_list_box.grid(row = 2, column=0, columnspan=3, pady = 25, padx=10, sticky= 'nsew')
 
 
 # Player input
-player_input = tk.Entry(window, width=40)
+player_input = tk.Entry(frame, width=40)
 player_input.insert(0, "Type here to start!")
-player_input.grid()
+player_input.grid(row = 3, column=1)
 player_input.bind('<BackSpace>', going_back_in_list)
 player_input.bind('<space>', add_wording)
 player_input.bind('<Return>', add_wording)
 player_input.bind('<Button-1>', handle_click)
 
 # Button
-start_button = tk.Button(window, text='Restart', command=lambda: reset_game())
-start_button.grid(pady=10)
+start_button = tk.Button(frame, text='Restart', command=lambda: reset_game())
+start_button.grid(row = 4, column=1, pady=10)
 
 
 # run 
