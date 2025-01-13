@@ -5,7 +5,7 @@
 
 
 {% block title %}
-    HOME
+    Local Cafe - Home
 {% endblock %}
 
 {% block content %}
@@ -13,7 +13,7 @@
     <div class="cafe-list">
         {% for cafe in cafes %}
         <div class='cafe-card'>
-            <div class='cafe-img'><img src="{{cafe.img_url}}"/></div>
+            <div class='cafe-img'><img src="{{cafe.img_url}}" alt="Location photo"/></div>
             <div class='cafe-desc'>
                 <h2>{{ cafe.name }}</h2>
                 <div class='cafe-desc-sub'> {{ cafe.location }} </div>

@@ -14,7 +14,8 @@
 </head>
 <body>
     <nav>
-        <a href="/"> HOME </a>
+        <a href="{% url 'index:index' %}"> HOME </a>
+        <a href="{% url 'index:add_cafe' %}"> Add A New Cafe </a>
     </nav>
     <main>
         {% block content %}

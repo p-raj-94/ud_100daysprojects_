@@ -6,3 +6,6 @@ from cafe.models import Cafe
 def index(request):
     cafes = Cafe.objects.all()
     return render(request, 'home.html', { 'cafes': cafes})
+
+def add_cafe(request):
+    return render(request, 'add_cafe.html')
