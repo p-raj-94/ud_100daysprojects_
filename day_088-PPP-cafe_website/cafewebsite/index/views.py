@@ -2,11 +2,13 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from cafe.models import Cafe
 from . import forms
+import requests
 
 # Create your views here.
 def index(request):
     cafes = Cafe.objects.all()
     locations = [ cafe.map_url for cafe in cafes]
+   
     return render(request, 'home.html', { 'cafes': cafes, 'locations': locations})
 
 def add_cafe(request):
