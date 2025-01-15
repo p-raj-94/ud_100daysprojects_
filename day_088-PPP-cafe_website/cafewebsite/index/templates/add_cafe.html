@@ -11,20 +11,11 @@
 {% block content %}
     <h1>Add A New Cafe<h1>
     <div class="cafe-form">
-        <form action="/" method="POST">
-            <label for="name">Enter the cafe's name: </label>
-            <input type="text" name="name" />
-            <label for="name">Its Google Url: </label>
-            <input type="text" name="map_url" />
-            <label for="name">Its Photo  url: </label>
-            <input type="text" name="img_url" />
-            <label for="name">Its location: </label>
-            <input type="text" name="location" />
-            <label for="name">Number of seats (ex: 20-30): </label>
-            <input type="text" name="seats" />
-            <label for="name">Price of a coffee (ex: £1.5): </label>
-            <input type="text" name="coffee_price" />
-            <input type="submit" value="Submit" />
+        <form class="form-add" action="{% url 'index:add_cafe' %}" method="POST" 
+        enctype="multipart/form-data">
+           {% csrf_token %}
+           {{ form }}
+           <button class="form-submit">Add Cafe</button>
         </form>
     </div>
 {% endblock %}
